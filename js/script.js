@@ -35,22 +35,39 @@ submitBtn.addEventListener("click", function () {
     }
 
     const date = `${objDate.day.number}    ${objDate.month}    ${hourInput.value}`
-
+    
     const task = taskInput.value
     taskInput.value = '';
     dateInput.value = '';
     hourInput.value = '';
-
-    //salvar
-    if (localStorage.hasOwnProperty("arrTasks")) {
-        arrTasks = JSON.parse(localStorage.getItem("arrTasks"))
-    } 
-    //inserir no vetor
-    arrTasks.push(new Task(task, date, false));
-    localStorage.setItem("arrTasks", JSON.stringify(arrTasks))
-
-    updateTask();
+     
+    if(!(date.includes('undefined') || date.includes('Date'))){
+        //salvar
+        if (localStorage.hasOwnProperty("arrTasks")) {
+            arrTasks = JSON.parse(localStorage.getItem("arrTasks"))
+        } 
+        let validate = true
     
+        for(let tasks of arrTasks){
+            if(date === tasks.date ){
+                alert("indisponivel")
+                validate = false
+            } 
+        }
+        console.log(validate+' c')
+
+        if(validate){
+            //inserir no vetor
+            arrTasks.push(new Task(task, date, false));
+            localStorage.setItem("arrTasks", JSON.stringify(arrTasks))
+            console.log(validate+' v')
+
+            updateTask();
+        }
+    }else{alert("indisponivel")}
+    
+    
+
 
     //resetar inputs
     taskInput.value = '';
@@ -65,7 +82,6 @@ submitBtn.addEventListener("click", function () {
 
     let cont = 0
     arrTasks = JSON.parse(localStorage.getItem("arrTasks"))
-    console.log(arrTasks)
     for (let task of arrTasks) {
         sectionTask.innerHTML += createTask(task, cont++);
     }
